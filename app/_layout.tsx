@@ -1,8 +1,8 @@
-import { Stack, useRouter } from "expo-router";
-import SplashScreen from "./(splash)";
-import { useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useGetUserDataQuery } from "@/services/queries/useAuthQueries";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
+import SplashScreen from "./(splash)";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,17 +16,17 @@ const queryClient = new QueryClient({
 
 function RootLayoutNav() {
   const router = useRouter();
-  const { data: userData, isLoading, isError } = useGetUserDataQuery();
+  const { data: userData, isLoading, isError, isFetched } = useGetUserDataQuery();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (isFetched) {
       if (userData && !isError) {
         router.replace("/(blog)");
       } else {
         router.replace("/(auth)");
       }
     }
-  }, [isLoading, userData, isError, router]);
+  }, [isFetched, userData, isError, router]);
 
   if (isLoading) {
     return <SplashScreen />;

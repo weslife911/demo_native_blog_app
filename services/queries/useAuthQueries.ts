@@ -1,12 +1,13 @@
-import { useAuthStore } from "@/store/useAuthStore"
+import { useAuthStore } from "@/store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 
-
 export const useGetUserDataQuery = () => {
-    const { getUserData } = useAuthStore();
-
     return useQuery({
-        queryKey: ["get-user-data"],
-        queryFn: () => getUserData()
+        queryKey: ['userData'],
+        queryFn: useAuthStore().getUserData,
+        retry: (failureCount, error) => {
+            if (error.message === "No token found") return false;
+            return failureCount < 3;
+        },
     });
-}
+};
