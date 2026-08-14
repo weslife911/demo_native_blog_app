@@ -16,17 +16,17 @@ const queryClient = new QueryClient({
 
 function RootLayoutNav() {
   const router = useRouter();
-  const { data: userData, isLoading, isError, isFetched } = useGetUserDataQuery();
+  const { data: userData, isLoading, isError } = useGetUserDataQuery();
 
   useEffect(() => {
-    if (isFetched) {
+    if (!isLoading) {
       if (userData && !isError) {
         router.replace("/(blog)");
       } else {
         router.replace("/(auth)");
       }
     }
-  }, [isFetched, userData, isError, router]);
+  }, [isLoading, userData, isError, router]);
 
   if (isLoading) {
     return <SplashScreen />;

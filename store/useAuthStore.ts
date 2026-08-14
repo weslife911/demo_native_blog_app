@@ -19,11 +19,11 @@ export const useAuthStore = () => ({
         return response.data;
     },
 
-    getUserData: async (): Promise<UserData> => {
+    getUserData: async (): Promise<UserData | null> => {
         const user_jwt = await AsyncStorage.getItem("user_jwt");
 
         if (!user_jwt) {
-            throw new Error("No token found");
+            return null;
         }
 
         const response = await axiosInstance.get("/auth/get-user-data", {
